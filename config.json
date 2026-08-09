@@ -1,0 +1,10 @@
+{
+    "CONSUMERS": [
+      {
+        "name": "Cliente uno"
+      },
+      {
+        "name": "Cliente dos"
+      }
+    ]
+  }

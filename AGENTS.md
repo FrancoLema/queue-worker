@@ -86,6 +86,41 @@ How the AI agent should work in this repository.
 - Raise explicit exceptions instead of returning ambiguous values.
 - Use context managers for resources. Avoid global mutable state and mutable default arguments.
 
+## Python Collection Types
+
+Choose collection types based on the behavior actually required by the code, rather than defaulting to concrete implementations.
+
+Prefer the most general type that accurately represents the contract:
+
+- Use `Iterable[T]` when only iteration is required.
+- Use `Collection[T]` when iteration, length, or membership are required, but ordering or mutation is not.
+- Use `Sequence[T]` when ordering and indexed access are required.
+- Use `list[T]` when a mutable list is explicitly required.
+- Use `set[T]` when uniqueness or set operations are required.
+- Use `frozenset[T]` when uniqueness is required and the collection must be immutable/hashable.
+- Use `Mapping[K, V]` when only dictionary-like read access is required.
+- Use `MutableMapping[K, V]` when mutation is required but a concrete `dict` is not.
+- Use `dict[K, V]` when dictionary-specific behavior is explicitly required.
+
+Prefer abstractions from `collections.abc` for parameters when the function does not depend on a concrete implementation.
+
+Examples:
+
+```python
+from collections.abc import Collection, Mapping, Sequence
+
+
+def process_items(items: Collection[str]) -> None:
+    ...
+
+
+def process_ordered_items(items: Sequence[str]) -> None:
+    ...
+
+
+def get_totals(values: Mapping[str, int]) -> dict[str, int]:
+    ...
+
 ### Error Handling
 
 - Validate external inputs (messages, configuration, environment).
