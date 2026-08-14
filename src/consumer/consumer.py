@@ -86,9 +86,6 @@ class Consumer:
             channel.basic_ack(
                 delivery_tag=method.delivery_tag,
             )
-
-            logger.info("Message processed from queue '%s'", self.queue_name)
-
         except Exception:
             logger.exception(
                 "Error processing message from queue '%s'",
