@@ -41,7 +41,7 @@ class MessageParser:
 
         operation = parsed_message["operation"]
 
-        if operation not in self._OPERATION_TYPES:
+        if operation not in OPERATION_TYPES:
             raise ParserException(f"Invalid operation type: {operation}")
 
         return parsed_message

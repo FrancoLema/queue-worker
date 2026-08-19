@@ -2,19 +2,20 @@ import typer
 
 from infrastructure.rabbitmq import create_queue
 from infrastructure.worker import Worker
+from consumer.consumer import Consumer
 
 app = typer.Typer()
 
 
 @app.command()
-def queue(queue_name: str = "messages") -> None:
-    """Create the RabbitMQ queue."""
-    create_queue(queue_name)
+def worker() -> None:
+    worker = Worker()
 
 
 @app.command()
-def worker() -> None:
-    worker = Worker()
+def consumer(queue_name: str = "messages") -> None:
+    consumer = Consumer(queue_name=queue_name)
+    consumer.consume()
 
 
 if __name__ == "__main__":

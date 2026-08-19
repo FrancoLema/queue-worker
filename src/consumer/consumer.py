@@ -1,8 +1,7 @@
 import logging
 import pika
-
 from pika.adapters.blocking_connection import BlockingChannel
-from infrastructure.tasks import process_message
+from infrastructure.celery import process_message
 from domain.message import MessageParser
 
 logger = logging.getLogger(__name__)
