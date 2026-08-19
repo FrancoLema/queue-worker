@@ -1,11 +1,11 @@
 import json
 from typing import Any
 
-from src.domain.exceptions import ParserException
+from domain.exceptions import ParserException
 
 WRITE_OPERATION_TYPE = "read"
 UPDATE_OPERATION_TYPE = "update"
-OPERATION_TYPES = frozenset(WRITE_OPERATION_TYPE, UPDATE_OPERATION_TYPE)
+OPERATION_TYPES = frozenset((WRITE_OPERATION_TYPE, UPDATE_OPERATION_TYPE))
 
 
 class MessageParser:
@@ -15,11 +15,14 @@ class MessageParser:
     Expected message:
     {
         "operation": "read",
-        "params": {...}
+        "params": {...}a
     }
     """
 
-    def parse(self, message: str) -> tuple(str, str):
+    def parse_message(self, message: str) -> dict:
+        return self._parse(message)
+
+    def _parse(self, message: str) -> dict:
         """
         Parse and validate the message from RabbitMQ.
         """
@@ -41,17 +44,4 @@ class MessageParser:
         if operation not in self._OPERATION_TYPES:
             raise ParserException(f"Invalid operation type: {operation}")
 
-        return (operation, params)
-
-
-class MessageProcessor:
-    """
-    Processor class for processing messages from RabbitMQ.
-    """
-
-    def __init__(self, message: str) -> None:
-        self.parser = MessageParser()
-        self.message = message
-
-    def parse(self) -> tuple(str, str):
-        return self.parser.parse(self.message)
+        return parsed_message

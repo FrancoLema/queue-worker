@@ -11,6 +11,6 @@ RUN pip install --no-cache-dir poetry \
     && poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 
-COPY . .
+COPY src ./src
 
-CMD ["python", "-m", "queue_worker"]
+CMD ["python", "-m", "app.main"]

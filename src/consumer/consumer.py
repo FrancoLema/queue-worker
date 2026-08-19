@@ -1,7 +1,9 @@
 import logging
-
 import pika
+
 from pika.adapters.blocking_connection import BlockingChannel
+from infrastructure.tasks import process_message
+from domain.message import MessageParser
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +13,7 @@ class Consumer:
 
     def __init__(self, queue_name: str, worker: Worker) -> None:
         self.queue_name = queue_name
-        self.worker = worker
+        self.parser = MessageParser()
 
     def consume(self) -> None:
         """Consume messages from RabbitMQ."""
@@ -81,7 +83,11 @@ class Consumer:
         try:
             logger.info("Message received from queue '%s'", self.queue_name)
 
-            self.worker.process(body)
+            decoded_body = body.decode()
+
+            parsed_msg = self.parser.parse_message(decoded_body)
+
+            process_message.delay(parsed_msg)
 
             channel.basic_ack(
                 delivery_tag=method.delivery_tag,
